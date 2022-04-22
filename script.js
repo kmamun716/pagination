@@ -1,23 +1,25 @@
 function displayData(){
-    fetch("https://jsonplaceholder.typicode.com/users")
+    fetch("https://jsonplaceholder.typicode.com/todos")
     .then(res=>res.json())
     .then(datas=>{
         const data=pagination(datas, state.page, state.rows); // this function to make specify data per page you want
         data.quarySet.map(data=>{
-            const p = document.createElement("p");
-            p.innerText= data.name;
-            document.getElementById("display").appendChild(p);
+            const li = document.createElement("li");
+            li.style.backgroundColor="#E5E5E5"
+            li.innerHTML=`
+                <h1>${data.title}</h1>
+            `;
+            document.getElementById("display").appendChild(li);
         })
         pageButtons(data.pages);
     })
 }
-displayData()
-
+displayData()//for show data
 
 const state={
     "page": 1,
-    "rows":2,
-    "window":2
+    "rows":10, //how many data want to show in every page
+    "window":5 //how many point want to show in pagination
 }
 
 
@@ -54,13 +56,14 @@ function pageButtons(pages){
         }
     }
 
+    //create pagination button
     for(let i=maxLeft; i<=maxRight; i++){
         wrapper.innerHTML +=`<button value="${i}" class="page btn btn-sm btn-info">${i}</button>`
        
     }
     //make first button
     if(state.page!=1){
-        wrapper.innerHTML =`<button value=${1} class="page btn btn-sm btn-info">First</button>` + wrapper.innerHTML
+        wrapper.innerHTML =`<button value=1 class="page btn btn-sm btn-info">First</button>` + wrapper.innerHTML
     }
     //make last button
     if(state.page!=pages){
@@ -71,7 +74,7 @@ function pageButtons(pages){
         single.addEventListener("click",(e)=>{
             document.getElementById("display").textContent="";
             state.page = Number(e.target.value);
-            displayData();
+            displayData(); // for show data when paginate
         })
     }
 }
